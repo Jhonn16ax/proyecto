@@ -125,8 +125,8 @@ function levelFlash(){const b=document.getElementById("level");b.parentElement.a
 
 document.getElementById("startBtn").onclick=start;document.getElementById("jumpBtn").onclick=jump;
 startScreen.addEventListener("click",e=>{if(!running&&!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});document.getElementById("resetBtn").onclick=reset;
-game.addEventListener("pointerdown",e=>{if(e.target===game||e.target.classList.contains("track"))jump()});
-document.addEventListener("keydown",e=>{if(e.code==="Enter"){e.preventDefault();start()}if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();jump()}if(e.code==="KeyR")reset()});
+game.addEventListener("pointerdown",e=>{if(running)jump();else if(!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});
+document.addEventListener("keydown",e=>{if(e.code==="Enter"){e.preventDefault();if(!running)start();else jump()}if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();jump()}if(e.code==="KeyR")reset()});
 reset();
 </script>
 </body></html>
