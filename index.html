@@ -31,6 +31,7 @@ button,select{font:inherit}
 .p1{left:8%;height:125px}.p2{left:31%;height:180px}.p3{right:16%;height:145px}.p4{right:4%;height:210px}
 .track{position:absolute;left:-5%;right:-5%;bottom:0;height:34%;transform:perspective(500px) rotateX(16deg);transform-origin:bottom;background:repeating-linear-gradient(90deg,#15536a 0 85px,#1b6b7e 86px 170px),linear-gradient(#182d46,#0b172b);border-top:8px solid #e9d67b;box-shadow:inset 0 15px 0 #0004}
 .track:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 55px,#64d7e822 57px 61px);transform:skewX(-12deg)}
+.obstacleGuide{position:absolute;bottom:34%;right:14%;z-index:6;font-size:15px;font-weight:1000;background:#071126dd;border:3px solid #fff;border-radius:10px;padding:7px 10px;box-shadow:0 5px 0 #0008}.obstacleGuide span{color:#ffd447}
 .speedlines{position:absolute;inset:0;pointer-events:none;opacity:0;transition:.2s;background:repeating-linear-gradient(175deg,transparent 0 55px,#fff8 56px 59px,transparent 60px 105px);animation:speed .25s linear infinite}
 .running .speedlines{opacity:.35}@keyframes speed{to{transform:translateX(-90px)}}
 .player{position:absolute;left:12%;bottom:25%;width:122px;height:160px;z-index:8;filter:drop-shadow(0 12px 5px #0008);transition:filter .15s}
@@ -91,7 +92,7 @@ button,select{font:inherit}
 <div class="sky"></div><div class="stars"></div><div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div>
 <div class="hill h1"></div><div class="hill h2"></div><div class="hill h3"></div>
 <div class="palm p1"></div><div class="palm p2"></div><div class="palm p3"></div><div class="palm p4"></div><div class="track"></div><div class="speedlines"></div>
-<div class="hudline">ENTER iniciar · ESPACIO / ↑ saltar · doble salto</div><div class="levelBadge">NIVEL <b id="level">1</b></div>
+<div class="hudline">ENTER iniciar · ESPACIO / ↑ saltar · doble salto</div><div class="obstacleGuide">🔺 <span>OBSTÁCULO</span></div><div class="levelBadge">NIVEL <b id="level">1</b></div>
 <div class="player" id="player"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div>
 <div class="startScreen" id="startScreen"><div class="panel"><h1>VELOCITY <span>RUN</span></h1><p>Un runner de plataformas rápido, colorido y original.</p>
 <div class="cards" id="cards">
