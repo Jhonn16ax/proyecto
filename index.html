@@ -53,7 +53,7 @@ button,select{font:inherit}
 .l1 .shoe{left:-18px}.l2 .shoe{left:-13px}
 .running .l1{animation:leg1 .15s infinite alternate}.running .l2{animation:leg2 .15s infinite alternate}.running .a1{animation:arm1 .15s infinite alternate}.running .a2{animation:arm2 .15s infinite alternate}
 @keyframes leg1{to{transform:rotate(-25deg) translateY(-9px)}}@keyframes leg2{to{transform:rotate(25deg) translateY(-9px)}}@keyframes arm1{to{transform:rotate(-30deg)}}@keyframes arm2{to{transform:rotate(25deg)}}
-.player.ruby .head{background:#ffd0b0}.player.ruby .head:after,.player.ruby .body{background:#e83e58}.player.ruby .chest{background:#ffe1bf}.player.ruby .leg{background:#b51f40}
+.player.ducking{height:105px!important;transform:scaleY(.65);transform-origin:bottom left}.player.ducking .head{top:30px}.player.ducking .arm{top:82px}.player.ducking .body{top:82px}.player.ruby .head{background:#ffd0b0}.player.ruby .head:after,.player.ruby .body{background:#e83e58}.player.ruby .chest{background:#ffe1bf}.player.ruby .leg{background:#b51f40}
 .player.moss .head{background:#a8e7b0}.player.moss .head:after,.player.moss .body{background:#1f9d67}.player.moss .leg{background:#12633f}
 .player.gold .head{background:#ffe0a4}.player.gold .head:after,.player.gold .body{background:#f3a51c}.player.gold .leg{background:#a85f12}
 .ring{position:absolute;width:35px;height:35px;border:8px solid var(--gold);border-radius:50%;box-shadow:0 0 0 2px #a66d00,inset 0 0 0 2px #fff8;z-index:7;animation:ringSpin .55s linear infinite}
@@ -119,7 +119,7 @@ function setCharacter(name){player.classList.remove("ruby","moss","gold");if(nam
 document.querySelectorAll(".card").forEach(card=>card.addEventListener("click",e=>{e.stopPropagation();document.querySelectorAll(".card").forEach(c=>c.classList.remove("selected"));card.classList.add("selected");setCharacter(card.dataset.char)}));
 function reset(){running=false;ducking=false;startScreen.style.display="flex";y=0;vy=0;jumps=0;score=0;rings=0;speed=390;level=1;levelScore=0;spawnClock=0;levelEl.textContent=1;objects.forEach(o=>o.el.remove());objects=[];player.style.bottom="25%";player.classList.remove("running","boost");player.classList.remove("ducking");ringsEl.textContent=0;scoreEl.textContent=0;gemsEl.textContent=0;bestEl.textContent=0}
 function start(){if(running)return;startScreen.style.display="none";running=true;player.classList.add("running");last=performance.now();requestAnimationFrame(loop)}
-function duck(on){if(!running)return;ducking=on;player.classList.toggle("ducking",on)}
+function duck(on){if(!running)return;ducking=on;player.classList.toggle("ducking",on);player.style.height=on?"105px":"160px"}
 function jump(){if(!running||ducking)return;if(jumps<2){vy=jumps===0?850:700;jumps++;player.classList.add("boost");setTimeout(()=>player.classList.remove("boost"),180)}}
 function spawn(type){const el=document.createElement("div");el.className=type;const x=game.clientWidth+80;el.style.left=x+"px";el.style.transform="translate3d(0,0,0)";if(type==="ring"){el.style.bottom=(39+Math.random()*20)+"%"}else if(type==="spike"){el.style.bottom="27%"}else if(type==="crate"){el.style.bottom="27%"}else if(type==="barrier"){el.style.bottom="27%"}else{el.style.bottom="25%"}game.appendChild(el);objects.push({el,type,x,taken:false})}
 function end(){if(!running)return;running=false;player.classList.remove("running","boost");player.classList.remove("ducking");const finalScore=Math.floor(score);best=0;bestEl.textContent=0;gems=0;gemsEl.textContent=0;objects.forEach(o=>o.el.remove());objects=[];startScreen.style.display="flex";const panel=document.querySelector(".panel");panel.querySelector("h1").innerHTML='💥 <span>¡PERDISTE!</span>';panel.querySelector("p").innerHTML='Llegaste hasta <b>'+finalScore+'</b> puntos.<br>Presiona ENTER, haz clic o pulsa JUGAR para volver a empezar.';rings=0;score=0;ringsEl.textContent=0;scoreEl.textContent=0;y=0;vy=0;jumps=0}
@@ -133,7 +133,7 @@ function levelFlash(){const b=document.getElementById("level");b.parentElement.a
 document.getElementById("startBtn").onclick=start;document.getElementById("jumpBtn").onclick=jump;
 startScreen.addEventListener("click",e=>{if(!running&&!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});document.getElementById("resetBtn").onclick=reset;
 game.addEventListener("pointerdown",e=>{if(running)jump();else if(!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});
-document.addEventListener("keyup",e=>{if(e.code==="ArrowDown"||e.code==="KeyS")duck(false)});
+document.addEventListener("keyup",e=>{if(e.code==="ArrowDown"||e.code==="KeyS"){e.preventDefault();duck(false)}});
 document.addEventListener("keydown",e=>{if(e.code==="ArrowDown"||e.code==="KeyS"){e.preventDefault();duck(true);return}if(e.code==="Enter"){e.preventDefault();if(!running)start();else jump()}if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();jump()}if(e.code==="KeyR")reset()});
 reset();
 </script>
