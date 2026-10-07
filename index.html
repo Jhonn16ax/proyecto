@@ -99,7 +99,7 @@ button,select{font:inherit}
 <div class="card" data-char="ruby"><div class="avatar player ruby"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">RUBY</div><div class="desc">Salto</div></div>
 <div class="card" data-char="moss"><div class="avatar player moss"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">MOSS</div><div class="desc">Equilibrio</div></div>
 <div class="card" data-char="gold"><div class="avatar player gold"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">GOLD</div><div class="desc">Potencia</div></div>
-</div><button class="startBtn" id="startBtn">▶ JUGAR</button><p>También puedes presionar <b>ENTER</b>.</p></div></div>
+</div><button class="startBtn" id="startBtn">▶ JUGAR</button><p><b>Haz clic en cualquier parte de esta pantalla o presiona ENTER para comenzar.</b></p></div></div>
 </div>
 <div class="controls"><button class="btn" id="jumpBtn">⬆ Saltar</button><button class="btn" id="resetBtn">↻ Reiniciar</button></div>
 <div class="hint">💍 Recoge anillos · 🦔 esquiva enemigos · 🔺 salta los pinchos · 📦 evita las cajas y barreras. Si tocas un obstáculo, el recorrido comienza de nuevo automáticamente.</div>
@@ -123,7 +123,8 @@ for(const o of objects){o.x-=speed*dt;o.el.style.transform="translateX("+o.x+"px
 if(near&&o.type==="ring"&&!o.taken){const rect=o.el.getBoundingClientRect(),prect=player.getBoundingClientRect();if(rect.left<prect.right&&rect.right>prect.left&&rect.top<prect.bottom&&rect.bottom>prect.top){o.taken=true;rings++;ringsEl.textContent=rings;o.el.remove()}}
 if(near&&o.type!=="ring"){const rect=o.el.getBoundingClientRect(),prect=player.getBoundingClientRect();if(rect.left<prect.right-10&&rect.right>prect.left+10&&rect.top<prect.bottom-8&&rect.bottom>prect.top+8){end();return}}}
 objects=objects.filter(o=>o.el.isConnected&&o.x>-100);requestAnimationFrame(loop)}
-document.getElementById("startBtn").onclick=start;document.getElementById("jumpBtn").onclick=jump;document.getElementById("resetBtn").onclick=reset;
+document.getElementById("startBtn").onclick=start;document.getElementById("jumpBtn").onclick=jump;
+startScreen.addEventListener("click",e=>{if(!running&&!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});document.getElementById("resetBtn").onclick=reset;
 game.addEventListener("pointerdown",e=>{if(e.target===game||e.target.classList.contains("track"))jump()});
 document.addEventListener("keydown",e=>{if(e.code==="Enter"){e.preventDefault();start()}if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();jump()}if(e.code==="KeyR")reset()});
 reset();
