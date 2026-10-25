@@ -1,140 +1,68 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Velocity Run</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEON RIDERS — Duelo online</title>
 <style>
-*{box-sizing:border-box}
-:root{--ink:#071126;--white:#fff;--cyan:#55e7ff;--gold:#ffd447}
-body{margin:0;background:#05091b;color:var(--white);font-family:Inter,system-ui,Arial,sans-serif;overflow-x:hidden}
-button,select{font:inherit}
-#app{min-height:100vh;padding:18px;background:radial-gradient(circle at 50% 0,#233a91 0,#0a1030 45%,#030611 100%)}
-.wrap{max-width:1180px;margin:auto}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-.logo{font-weight:1000;font-size:clamp(25px,4vw,42px);letter-spacing:-2px;text-shadow:0 4px 0 #0005}
-.logo span{color:var(--cyan)}
-.hud{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.pill{padding:9px 13px;border:1px solid #ffffff30;border-radius:14px;background:#071126cc;backdrop-filter:blur(10px);font-weight:900;box-shadow:0 8px 25px #0004}
-.game{position:relative;height:min(610px,70vh);min-height:480px;overflow:hidden;border:3px solid #ffffff28;border-radius:28px;background:#72dfff;box-shadow:0 25px 70px #0008;isolation:isolate;cursor:pointer}
-.sky{position:absolute;inset:0;background:linear-gradient(#263aa1 0%,#5e5bd1 40%,#f19a89 67%,#ffcf76 100%);z-index:-5}
-.sun{position:absolute;width:105px;height:105px;border-radius:50%;right:10%;top:12%;background:#ffe97b;box-shadow:0 0 55px #ffe97b99}
-.stars{position:absolute;inset:0;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:83px 71px;opacity:.18}
-.cloud{position:absolute;width:190px;height:52px;border-radius:50px;background:#fff9;filter:blur(.3px)}
-.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:inherit}
-.cloud:before{width:78px;height:78px;left:30px;top:-42px}.cloud:after{width:58px;height:58px;left:96px;top:-29px}
-.c1{left:7%;top:17%;transform:scale(.8)}.c2{right:13%;top:30%;transform:scale(.65)}
-.hill{position:absolute;bottom:28%;width:70%;height:42%;border-radius:50% 50% 0 0/90% 90% 0 0;filter:saturate(1.2)}
-.h1{left:-25%;background:#176b69}.h2{left:25%;bottom:25%;background:#25834f}.h3{right:-25%;bottom:29%;background:#0d5959}
-.palm{position:absolute;bottom:27%;width:13px;height:160px;background:linear-gradient(90deg,#693d20,#a7652d,#51311e);border-radius:8px;z-index:1;transform-origin:bottom}
-.palm:before{content:"";position:absolute;width:150px;height:95px;left:-67px;top:-45px;background:radial-gradient(ellipse at 50% 90%,#20a84c 0 18%,transparent 19%),radial-gradient(ellipse at 10% 70%,#08733f 0 16%,transparent 17%),radial-gradient(ellipse at 90% 70%,#08733f 0 16%,transparent 17%),radial-gradient(ellipse at 30% 20%,#12a74a 0 15%,transparent 16%),radial-gradient(ellipse at 70% 20%,#12a74a 0 15%,transparent 16%);filter:drop-shadow(0 8px 4px #0004)}
-.p1{left:8%;height:125px}.p2{left:31%;height:180px}.p3{right:16%;height:145px}.p4{right:4%;height:210px}
-.track{position:absolute;left:-5%;right:-5%;bottom:0;height:34%;transform:perspective(500px) rotateX(16deg);transform-origin:bottom;background:repeating-linear-gradient(90deg,#15536a 0 85px,#1b6b7e 86px 170px),linear-gradient(#182d46,#0b172b);border-top:8px solid #e9d67b;box-shadow:inset 0 15px 0 #0004}
-.track:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 55px,#64d7e822 57px 61px);transform:skewX(-12deg)}
-
-.speedlines{position:absolute;inset:0;pointer-events:none;opacity:0;transition:.2s;background:repeating-linear-gradient(175deg,transparent 0 55px,#fff8 56px 59px,transparent 60px 105px);animation:speed .25s linear infinite}
-.running .speedlines{opacity:.35}@keyframes speed{to{transform:translateX(-90px)}}
-.player{position:absolute;left:12%;bottom:25%;width:122px;height:160px;z-index:8;filter:drop-shadow(0 12px 5px #0008);transition:filter .15s}
-.player.boost{filter:drop-shadow(0 0 16px #55e7ff) drop-shadow(0 12px 5px #0008)}
-.char{position:absolute;inset:0}
-.head{position:absolute;left:31px;top:5px;width:67px;height:63px;border-radius:50% 48% 46% 52%;background:#4cc7ff;border:4px solid #071126;z-index:4}
-.head:before{content:"";position:absolute;left:13px;top:14px;width:15px;height:23px;border-radius:50%;background:#fff;border:3px solid #071126;box-shadow:23px 0 0 -2px #fff,23px 0 0 1px #071126}
-.head:after{content:"";position:absolute;left:-6px;top:-19px;width:78px;height:48px;background:#1688e7;clip-path:polygon(0 75%,12% 0,28% 62%,43% 4%,59% 58%,79% 0,100% 78%,76% 67%,55% 82%,31% 67%);border-bottom:4px solid #071126}
-.muzzle{position:absolute;left:45px;top:44px;width:45px;height:25px;border-radius:50%;background:#ffd9ad;border:3px solid #071126;z-index:5}
-.nose{position:absolute;left:77px;top:47px;width:14px;height:11px;border-radius:60%;background:#071126;z-index:7}
-.body{position:absolute;left:36px;top:60px;width:58px;height:63px;border-radius:45% 45% 38% 38%;background:#1688e7;border:4px solid #071126;z-index:3}
-.chest{position:absolute;left:49px;top:75px;width:34px;height:30px;border-radius:50%;background:#f8e0bc;z-index:4;border:2px solid #071126}
-.arm{position:absolute;top:67px;width:22px;height:54px;border:4px solid #071126;border-radius:18px;background:#4cc7ff;z-index:2}
-.arm:after{content:"";position:absolute;bottom:-12px;left:-7px;width:31px;height:23px;border-radius:50%;background:#fff;border:4px solid #071126}
-.a1{left:19px;transform:rotate(35deg)}.a2{right:8px;transform:rotate(-48deg)}
-.leg{position:absolute;bottom:8px;width:25px;height:54px;background:#1688e7;border:4px solid #071126;border-radius:14px;z-index:1}
-.l1{left:34px;transform:rotate(16deg)}.l2{right:28px;transform:rotate(-17deg)}
-.shoe{position:absolute;bottom:-13px;width:54px;height:27px;border-radius:55% 45% 45% 55%;background:#f23b4b;border:4px solid #071126;box-shadow:inset 0 5px #fff}
-.l1 .shoe{left:-18px}.l2 .shoe{left:-13px}
-.running .l1{animation:leg1 .15s infinite alternate}.running .l2{animation:leg2 .15s infinite alternate}.running .a1{animation:arm1 .15s infinite alternate}.running .a2{animation:arm2 .15s infinite alternate}
-@keyframes leg1{to{transform:rotate(-25deg) translateY(-9px)}}@keyframes leg2{to{transform:rotate(25deg) translateY(-9px)}}@keyframes arm1{to{transform:rotate(-30deg)}}@keyframes arm2{to{transform:rotate(25deg)}}
-.player.ducking{height:160px!important;transform:scaleY(.58) translateY(34px);transform-origin:bottom left}.player.ducking .head{top:48px}.player.ducking .arm{top:92px}.player.ducking .body{top:92px}.player.ducking .leg{bottom:28px}.player.ruby .head{background:#ffd0b0}.player.ruby .head:after,.player.ruby .body{background:#e83e58}.player.ruby .chest{background:#ffe1bf}.player.ruby .leg{background:#b51f40}
-.player.moss .head{background:#a8e7b0}.player.moss .head:after,.player.moss .body{background:#1f9d67}.player.moss .leg{background:#12633f}
-.player.gold .head{background:#ffe0a4}.player.gold .head:after,.player.gold .body{background:#f3a51c}.player.gold .leg{background:#a85f12}
-.ring{position:absolute;width:35px;height:35px;border:8px solid var(--gold);border-radius:50%;box-shadow:0 0 0 2px #a66d00,inset 0 0 0 2px #fff8;z-index:7;animation:ringSpin .55s linear infinite}
-@keyframes ringSpin{50%{transform:scaleX(.45)}}
-.enemy{position:absolute;width:46px;height:44px;border-radius:50% 50% 35% 35%;background:#d93848;border:4px solid #071126;z-index:7;box-shadow:0 8px 0 #7e1f34}
-.enemy:before{content:"";position:absolute;left:8px;top:9px;width:9px;height:12px;border-radius:50%;background:#fff;box-shadow:18px 0 #fff;border:2px solid #071126}
-.enemy:after{content:"";position:absolute;left:-10px;right:-10px;bottom:-10px;height:11px;background:repeating-linear-gradient(90deg,#071126 0 10px,transparent 10px 15px);clip-path:polygon(0 0,100% 0,90% 100%,75% 20%,60% 100%,45% 20%,30% 100%,15% 20%)}
-.spike{position:absolute;width:58px;height:48px;z-index:7;background:#dce7f5;border:4px solid #071126;clip-path:polygon(0 100%,12% 35%,25% 100%,40% 18%,55% 100%,70% 35%,85% 100%,100% 12%,100% 100%);filter:drop-shadow(0 7px 0 #68748b)}
-.crate{position:absolute;width:58px;height:64px;z-index:7;background:linear-gradient(135deg,#a86b35,#6f3f20);border:5px solid #071126;border-radius:7px;box-shadow:inset 0 0 0 4px #d28a46}
-.crate:before,.crate:after{content:"";position:absolute;background:#d28a46}
-.crate:before{width:5px;left:50%;top:0;bottom:0;transform:translateX(-50%)}.crate:after{height:5px;left:0;right:0;top:50%;transform:translateY(-50%)}
-.barrier{position:absolute;width:74px;height:66px;z-index:7;border:5px solid #071126;border-radius:10px;background:repeating-linear-gradient(135deg,#f5d342 0 14px,#df3f45 14px 28px);box-shadow:0 7px 0 #071126}
-.gem{position:absolute;width:28px;height:28px;border:4px solid #071126;background:#7dffef;transform:rotate(45deg);z-index:7;box-shadow:0 0 12px #7dffef}
-.bird{position:absolute;width:62px;height:30px;z-index:7}
-.bird:before,.bird:after{content:"";position:absolute;top:7px;width:31px;height:15px;border-top:6px solid #071126;border-radius:50%}
-.bird:before{left:0;transform:rotate(-20deg)}
-.bird:after{right:0;transform:rotate(20deg)}
-.ring,.enemy,.spike,.crate,.barrier,.gem,.bird{transition:none;will-change:transform}
-.levelBadge{position:absolute;right:20px;top:18px;padding:7px 11px;border-radius:10px;background:#06112699;border:1px solid #fff3;font-size:13px;font-weight:1000;z-index:12}.hudline{position:absolute;left:20px;top:18px;padding:7px 11px;border-radius:10px;background:#06112699;border:1px solid #fff3;font-size:13px;font-weight:900;z-index:12}
-.startScreen{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:#03061199;backdrop-filter:blur(4px)}
-.panel{width:min(620px,92%);padding:28px;border:2px solid #ffffff30;border-radius:26px;background:linear-gradient(145deg,#0b1740ee,#081027ee);box-shadow:0 25px 70px #0009;text-align:center}
-.panel h1{margin:0;font-size:clamp(35px,7vw,64px);letter-spacing:-3px}.panel h1 span{color:var(--cyan)}.panel p{font-weight:700;color:#d8e4ff}
-.cards{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}
-.card{width:125px;padding:12px 8px;border-radius:18px;background:#ffffff0b;border:2px solid #fff2;cursor:pointer;transition:.15s}
-.card:hover,.card.selected{transform:translateY(-5px);border-color:var(--cyan);background:#55e7ff14}
-.avatar{height:78px;position:relative;transform:scale(.65);margin:-5px}
-.name{font-weight:1000}.desc{font-size:11px;color:#aebee0}
-.startBtn{border:0;border-radius:16px;padding:14px 28px;background:linear-gradient(135deg,#55e7ff,#3674ff);color:#031025;font-weight:1000;font-size:18px;cursor:pointer;box-shadow:0 8px 0 #17348a,0 15px 30px #0005}
-.startBtn:active{transform:translateY(4px);box-shadow:0 4px 0 #17348a}
-.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-.btn{border:1px solid #fff2;border-radius:13px;padding:10px 16px;background:#0b1738;color:#fff;font-weight:900;cursor:pointer}.btn:hover{background:#142657}
-.hint{text-align:center;color:#b7c6e8;font-size:13px;font-weight:700;margin-top:9px}
-@media(max-width:700px){#app{padding:8px}.game{height:72vh;min-height:450px;border-radius:18px}.player{left:10%;transform:scale(.82);transform-origin:bottom left}.palm{transform:scale(.75)}.hud{font-size:12px}.pill{padding:7px 9px}.top{align-items:flex-start}.logo{font-size:25px}}
+:root{color-scheme:dark;--cyan:#55e9ff;--orange:#ff9b4a;--panel:#0b1928;--line:#29465b}*{box-sizing:border-box}body{margin:0;background:#050a12;color:#f5f8ff;font-family:Inter,system-ui,Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}.top{height:66px;padding:0 clamp(14px,4vw,42px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff1c;background:#07111d}.logo{font-weight:1000;letter-spacing:.12em;font-size:22px}.logo span{color:var(--cyan)}.tag{font-size:10px;color:#8fa9bf;letter-spacing:.16em;font-weight:800}main{max-width:1320px;margin:auto;padding:22px clamp(12px,3vw,30px)}.hero{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:16px}.kicker{color:var(--cyan);font-size:10px;letter-spacing:.2em;font-weight:900}.hero h1{font-size:clamp(28px,4vw,43px);line-height:1;margin:8px 0;letter-spacing:-.05em}.hero p{color:#9eb2c6;font-size:13px;line-height:1.6;max-width:620px;margin:0}.statusbox{border:1px solid #55e9ff4a;border-radius:13px;background:#55e9ff0b;padding:12px 16px;min-width:130px}.statusbox b{display:block;font-size:15px}.statusbox small{color:#8fa9bf;font-size:9px;letter-spacing:.12em}.frame{border:1px solid #34556b;border-radius:18px;overflow:hidden;background:#08121e;box-shadow:0 25px 80px #0009}.hud{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 15px;background:#0b1928;border-bottom:1px solid #ffffff17}.rider{font-size:12px;font-weight:900;display:flex;gap:9px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px currentColor}.dot.orange{background:var(--orange)}.sub{display:block;color:#8fa9bf;font-size:10px;font-weight:500;margin-top:3px}#scene{display:block;width:100%;height:auto;aspect-ratio:16/8;touch-action:none;background:#172c3c}.controls{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:13px 15px;background:#0b1928;border-top:1px solid #ffffff17}.keys{font-size:11px;line-height:1.9;color:#a9bdcd}.keys b{display:block;color:#fff;font-size:12px}.keys.right{text-align:right}.key{display:inline-block;border:1px solid #496176;background:#13283a;border-radius:5px;padding:1px 6px;margin:0 2px;color:#effaff}.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}.btn{border:1px solid #3b596f;background:#12263a;color:#effaff;border-radius:10px;padding:11px 14px;font-size:11px;font-weight:900}.btn.primary{background:var(--cyan);border-color:var(--cyan);color:#04111a}.btn:disabled{opacity:.45;cursor:not-allowed}.stats{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;margin-top:12px}.card{border:1px solid #ffffff16;background:#0b1724;border-radius:13px;padding:14px}.card h3{font-size:10px;letter-spacing:.15em;margin:0 0 7px}.card p{font-size:11px;line-height:1.7;color:#9ab0c2;margin:0}.meter{height:5px;border-radius:10px;background:#1e3446;margin-top:9px;overflow:hidden}.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--orange));width:0%}.foot{text-align:center;font-size:10px;color:#668096;line-height:1.7;margin:16px 0}.overlay{position:fixed;inset:0;z-index:10;background:#020710df;backdrop-filter:blur(9px);display:grid;place-items:center;padding:16px}.modal{width:min(510px,100%);background:linear-gradient(145deg,#102536,#08111b);border:1px solid #55e9ff55;border-radius:21px;padding:25px;box-shadow:0 30px 100px #000b}.modal h2{font-size:28px;letter-spacing:-.04em;margin:8px 0}.modal p{font-size:13px;color:#a0b5c7;line-height:1.7}.formrow{display:flex;gap:8px;margin:12px 0}.formrow input{min-width:0;flex:1;background:#07121e;color:#fff;border:1px solid #36546a;border-radius:10px;padding:12px;text-transform:uppercase;letter-spacing:.1em}.divider{display:flex;align-items:center;gap:10px;color:#728ba0;font-size:10px;margin:14px 0}.divider:before,.divider:after{content:"";height:1px;background:#ffffff20;flex:1}.msg{min-height:18px;color:#ffbf75;font-size:11px;margin:8px 0}.hidden{display:none!important}.touch{display:none;gap:8px;justify-content:center;padding:10px;background:#0b1928}.touch button{min-width:56px;padding:12px;border-radius:9px;background:#142b40;color:white;border:1px solid #426077}@media(max-width:760px){.hero{align-items:start;flex-direction:column}.statusbox{min-width:0}.stats{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.actions{grid-column:1/-1;grid-row:2}.keys.right{text-align:right}.tag{display:none}.touch{display:flex}.hud{padding:10px}.controls{padding:10px}}
 </style>
 </head>
 <body>
-<main id="app"><div class="wrap">
-<div class="top"><div class="logo">VELOCITY <span>RUN</span></div>
-<div class="hud"><div class="pill">💍 <b id="rings">0</b></div><div class="pill">🏃 <b id="score">0</b></div><div class="pill">💎 <b id="gems">0</b></div><div class="pill">🏆 <b id="best">0</b></div></div></div>
-<div class="game" id="game">
-<div class="sky"></div><div class="stars"></div><div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div>
-<div class="hill h1"></div><div class="hill h2"></div><div class="hill h3"></div>
-<div class="palm p1"></div><div class="palm p2"></div><div class="palm p3"></div><div class="palm p4"></div><div class="track"></div><div class="speedlines"></div><div id="collectibleGuide" style="display:none"></div>
-<div class="hudline">ENTER iniciar · ESPACIO / ↑ saltar · ↓ / S agacharse</div><div class="levelBadge">NIVEL <b id="level">1</b></div>
-<div class="player" id="player"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div>
-<div class="startScreen" id="startScreen"><div class="panel"><h1>VELOCITY <span>RUN</span></h1><p>Un runner de plataformas rápido, colorido y original.</p>
-<div class="cards" id="cards">
-<div class="card selected" data-char="volt"><div class="avatar player"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">VOLT</div><div class="desc">Velocidad</div></div>
-<div class="card" data-char="ruby"><div class="avatar player ruby"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">RUBY</div><div class="desc">Salto</div></div>
-<div class="card" data-char="moss"><div class="avatar player moss"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">MOSS</div><div class="desc">Equilibrio</div></div>
-<div class="card" data-char="gold"><div class="avatar player gold"><div class="char"><div class="head"></div><div class="muzzle"></div><div class="nose"></div><div class="body"></div><div class="chest"></div><div class="arm a1"></div><div class="arm a2"></div><div class="leg l1"><div class="shoe"></div></div><div class="leg l2"><div class="shoe"></div></div></div></div><div class="name">GOLD</div><div class="desc">Potencia</div></div>
-</div><button class="startBtn" id="startBtn">▶ JUGAR</button><p><b>Haz clic en cualquier parte de esta pantalla o presiona ENTER para comenzar.</b></p></div></div>
-</div>
-<div class="controls"><button class="btn" id="jumpBtn">⬆ Saltar</button><button class="btn" id="resetBtn">↻ Reiniciar</button></div>
-<div class="hint">💍 Recoge anillos · 💎 recoge cristales · Salta y agáchate para esquivar las aves.</div>
-</div></main>
+<header class="top"><div class="logo">NEON <span>RIDERS</span></div><div class="tag">ONLINE RACE · SUPABASE REALTIME</div></header>
+<main>
+<section class="hero"><div><div class="kicker">DUEL MODE / TWO RIDERS</div><h1>Dos motos. Una pista.<br>Un solo ganador.</h1><p>Compite en una carretera de montaña al atardecer. Crea una sala, comparte el código con tu rival y juega desde dos computadoras. Cada piloto controla su propia moto.</p></div><div class="statusbox"><b id="conn">SIN CONECTAR</b><small id="roomlabel">ESPERANDO SALA</small></div></section>
+<section class="frame"><div class="hud"><div class="rider"><i class="dot"></i><div>JUGADOR 1 <span class="sub" id="p1label">Azul · W A D</span></div></div><div class="kicker" id="raceStatus">SALA NO INICIADA</div><div class="rider"><i class="dot orange"></i><div>JUGADOR 2 <span class="sub" id="p2label">Naranja · Flechas</span></div></div></div><canvas id="scene" width="1280" height="640" aria-label="Carrera de motos"></canvas>
+<div class="controls"><div class="keys"><b>🔹 PILOTO AZUL</b><span class="key">W</span> acelerar <span class="key">A</span><span class="key">D</span> girar</div><div class="actions"><button class="btn primary" id="start" disabled>▶ INICIAR</button><button class="btn" id="reset">↻ REINICIAR</button></div><div class="keys right"><b>🟠 PILOTO NARANJA</b><span class="key">↑</span> acelerar <span class="key">←</span><span class="key">→</span> girar</div></div>
+<div class="touch"><button data-key="a">◀</button><button data-key="w">ACELERAR</button><button data-key="d">▶</button></div></section>
+<section class="stats"><article class="card"><h3>PROGRESO DE CARRERA</h3><p id="progress">Crea o únete a una sala. Gana quien complete primero tres vueltas.</p><div class="meter"><span id="bar"></span></div></article><article class="card"><h3>JUGADOR 1 · AZUL</h3><p id="s1">Esperando...</p></article><article class="card"><h3>JUGADOR 2 · NARANJA</h3><p id="s2">Esperando...</p></article></section>
+<p class="foot">NEON RIDERS · Proyecto universitario con HTML, Canvas, Supabase Realtime y Vercel.<br>Prototipo 2D con perspectiva visual de carretera; no es un motor 3D real.</p>
+</main>
+<div class="overlay" id="lobby"><div class="modal"><div class="kicker">NEON RIDERS / ONLINE</div><h2>Enciende motores.</h2><p>Juega contra otra persona en una computadora distinta. Crea una sala y comparte el código, o ingresa el código de tu rival. Ambos deben abrir esta misma página.</p><button class="btn primary" id="create" style="width:100%">CREAR SALA NUEVA</button><div class="divider">O ENTRA CON UN CÓDIGO</div><div class="formrow"><input id="code" maxlength="6" placeholder="EJ. R7K2Q" aria-label="Código de sala"><button class="btn" id="join">UNIRSE</button></div><div class="msg" id="lobbymsg">Conectando con el servicio de carrera...</div><p style="font-size:10px">La sala usa un canal público de Supabase Realtime para esta demostración de clase. No compartas información personal.</p></div></div>
+<div class="overlay hidden" id="finish"><div class="modal"><div class="kicker">FIN DE CARRERA</div><h2 id="winner">¡Carrera terminada!</h2><p id="winnerdesc">La carrera ha finalizado.</p><button class="btn primary" id="again" style="width:100%">CORRER DE NUEVO</button></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const game=document.getElementById("game"),player=document.getElementById("player"),startScreen=document.getElementById("startScreen");
-const ringsEl=document.getElementById("rings"),scoreEl=document.getElementById("score"),gemsEl=document.getElementById("gems"),bestEl=document.getElementById("best"),levelEl=document.getElementById("level");
-let running=false,last=0,y=0,vy=0,jumps=0,ducking=false,score=0,rings=0,gems=0,best=0,speed=390,objects=[],level=1,levelScore=0,spawnClock=0;
-bestEl.textContent=best;
-function setCharacter(name){player.classList.remove("ruby","moss","gold");if(name!=="volt")player.classList.add(name)}
-document.querySelectorAll(".card").forEach(card=>card.addEventListener("click",e=>{e.stopPropagation();document.querySelectorAll(".card").forEach(c=>c.classList.remove("selected"));card.classList.add("selected");setCharacter(card.dataset.char)}));
-function reset(){running=false;ducking=false;startScreen.style.display="flex";y=0;vy=0;jumps=0;score=0;rings=0;speed=390;level=1;levelScore=0;spawnClock=0;levelEl.textContent=1;objects.forEach(o=>o.el.remove());objects=[];player.style.bottom="25%";player.classList.remove("running","boost");player.classList.remove("ducking");ringsEl.textContent=0;scoreEl.textContent=0;gemsEl.textContent=0;bestEl.textContent=0}
-function start(){if(running)return;startScreen.style.display="none";running=true;player.classList.add("running");last=performance.now();requestAnimationFrame(loop)}
-function duck(on){if(!running)return;ducking=on;player.classList.toggle("ducking",on);player.style.height="160px"}
-function jump(){if(!running||ducking)return;if(jumps<2){vy=jumps===0?850:700;jumps++;player.classList.add("boost");setTimeout(()=>player.classList.remove("boost"),180)}}
-function spawn(type){const el=document.createElement("div");el.className=type;const x=game.clientWidth+80;el.style.left=x+"px";el.style.transform="translate3d(0,0,0)";if(type==="ring"){el.style.bottom=(39+Math.random()*20)+"%"}else if(type==="spike"){el.style.bottom="27%"}else if(type==="crate"){el.style.bottom="27%"}else if(type==="barrier"){el.style.bottom="27%"}else{el.style.bottom="25%"}game.appendChild(el);objects.push({el,type,x,taken:false})}
-function end(){if(!running)return;running=false;player.classList.remove("running","boost");player.classList.remove("ducking");const finalScore=Math.floor(score);best=0;bestEl.textContent=0;gems=0;gemsEl.textContent=0;objects.forEach(o=>o.el.remove());objects=[];startScreen.style.display="flex";const panel=document.querySelector(".panel");panel.querySelector("h1").innerHTML='💥 <span>¡PERDISTE!</span>';panel.querySelector("p").innerHTML='Llegaste hasta <b>'+finalScore+'</b> puntos.<br>Presiona ENTER, haz clic o pulsa JUGAR para volver a empezar.';rings=0;score=0;ringsEl.textContent=0;scoreEl.textContent=0;y=0;vy=0;jumps=0}
-function loop(t){if(!running)return;const dt=Math.min((t-last)/1000,.035);last=t;score+=dt*12;levelScore+=dt*12;scoreEl.textContent=Math.floor(score);best=Math.floor(score);bestEl.textContent=best;const newLevel=1+Math.floor(levelScore/120);if(newLevel!==level){level=newLevel;levelEl.textContent=level;levelFlash();}speed=390+(level-1)*85+score*1.35;vy-=2050*dt;y+=vy*dt;if(y<=0){y=0;vy=0;jumps=0}player.style.bottom="calc(25% + "+y+"px)";spawnClock+=dt;const interval=Math.max(.35,1.05-(level-1)*.025);if(spawnClock>=interval){spawnClock=0;const roll=Math.random();if(roll<.25)spawn("ring");else if(roll<.38)spawn("gem");else if(roll<.53)spawn("spike");else if(roll<.67)spawn("enemy");else if(roll<.80)spawn("crate");else if(roll<.90)spawn("barrier");else spawn("bird");if(level>=3&&Math.random()<.25)spawn("ring");}const pr=game.clientWidth*.12;
-for(const o of objects){o.x-=speed*dt;o.el.style.left=o.x+"px";const ow=o.type==="ring"?35:o.type==="gem"?28:o.type==="bird"?62:o.type==="enemy"?46:o.type==="spike"?58:o.type==="crate"?58:74;const near=o.x<pr+95&&o.x+ow>pr-5;
-if(near&&(o.type==="ring"||o.type==="gem")&&!o.taken){const rect=o.el.getBoundingClientRect(),prect=player.getBoundingClientRect();if(rect.left<prect.right&&rect.right>prect.left&&rect.top<prect.bottom&&rect.bottom>prect.top){o.taken=true;if(o.type==="ring"){rings++;ringsEl.textContent=rings}else{gems++;gemsEl.textContent=gems;score+=30}o.el.remove()}}
-if(near&&o.type!=="ring"&&o.type!=="gem"){const rect=o.el.getBoundingClientRect(),prect=player.getBoundingClientRect();const birdHit=o.type==="bird" ? (!ducking && rect.top<prect.bottom-10 && rect.bottom>prect.top+8) : (rect.top<prect.bottom-8 && rect.bottom>prect.top+8);if(rect.left<prect.right-10&&rect.right>prect.left+10&&birdHit){end();return}}}
-objects=objects.filter(o=>o.el.isConnected&&o.x>-120);requestAnimationFrame(loop)}
-function levelFlash(){const b=document.getElementById("level");b.parentElement.animate([{transform:"scale(1)"},{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:450});}
-
-document.getElementById("startBtn").onclick=start;document.getElementById("jumpBtn").onclick=jump;
-startScreen.addEventListener("click",e=>{if(!running&&!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});document.getElementById("resetBtn").onclick=reset;
-game.addEventListener("pointerdown",e=>{if(running)jump();else if(!e.target.closest(".card")&&!e.target.closest(".startBtn"))start()});
-document.addEventListener("keyup",e=>{if(e.code==="ArrowDown"||e.code==="KeyS"||e.code==="KeyD"){e.preventDefault();duck(false)}});
-document.addEventListener("keydown",e=>{if(e.code==="ArrowDown"||e.code==="KeyS"||e.code==="KeyD"){e.preventDefault();duck(true);return}if(e.code==="Enter"){e.preventDefault();if(!running)start();else jump()}if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();jump()}if(e.code==="KeyR")reset()});
-reset();
+const SUPABASE_URL='https://gvbonutmkcsxskhfavjp.supabase.co';
+const SUPABASE_KEY='sb_publishable_evwnmp0wSzR8iD-JWsbGlA_OjAc6ucx';
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id),canvas=$('scene'),ctx=canvas.getContext('2d');
+const W=1280,H=640,keys=new Set();let channel=null,room='',player=0,connected=false,running=false,ended=false,last=0,elapsed=0,scroll=0,sendTimer=0,raf=0,spawn=0,obstacles=[];
+const riders=[{x:-.32,speed:0,progress:0,laps:0,steer:0},{x:.32,speed:0,progress:0,laps:0,steer:0}];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function setMsg(t){$('lobbymsg').textContent=t}
+function setStatus(t){$('raceStatus').textContent=t}
+function newCode(){return Array.from(crypto.getRandomValues(new Uint8Array(5)),b=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b%32]).join('')}
+function roomChannel(code){return supabase.channel('neon-riders-'+code,{config:{broadcast:{self:false}}})}
+async function connect(code,host){
+ if(channel)await supabase.removeChannel(channel);
+ room=code.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);if(room.length<4){setMsg('El código debe tener al menos 4 caracteres.');return}
+ channel=roomChannel(room);player=host?1:2;connected=false;
+ channel.on('broadcast',{event:'state'},({payload})=>{if(payload&&payload.player!==player&&payload.state){Object.assign(riders[payload.player-1],payload.state);updateStats();}});
+ channel.on('broadcast',{event:'start'},({payload})=>{if(payload&&payload.room===room)startRace(false)});
+ channel.on('broadcast',{event:'reset'},()=>resetLocal(false));
+ channel.on('broadcast',{event:'finish'},({payload})=>{if(payload&&payload.room===room)finish(payload.player,false)});
+ channel.subscribe(async status=>{
+  if(status==='SUBSCRIBED'){connected=true;$('conn').textContent='CONECTADO';$('roomlabel').textContent='SALA '+room;$('lobby').classList.add('hidden');$('start').disabled=false;$('start').textContent=player===1?'▶ INICIAR CARRERA':'ESPERANDO AL JUGADOR 1';$('start').disabled=player===2;setStatus(player===1?'SALA LISTA':'CONECTADO · JUGADOR 2');setMsg('Conectado a '+room);}
+  else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){setMsg('No se pudo conectar. Revisa internet y vuelve a intentarlo.');$('conn').textContent='ERROR';}
+ });
+}
+$('create').onclick=()=>connect(newCode(),true);
+$('join').onclick=()=>{const c=$('code').value.trim();if(!c){setMsg('Escribe el código que te compartieron.');return}connect(c,false)};
+$('code').addEventListener('keydown',e=>{if(e.key==='Enter')$('join').click()});
+function resetLocal(broadcast=true){running=false;ended=false;elapsed=0;scroll=0;spawn=0;obstacles=[];riders.forEach((r,i)=>Object.assign(r,{x:i===0?-.32:.32,speed:0,progress:0,laps:0,steer:0}));$('finish').classList.add('hidden');$('start').disabled=player!==1||!connected;$('start').textContent='▶ INICIAR';setStatus('SALA LISTA');updateStats();draw();if(broadcast&&channel)channel.send({type:'broadcast',event:'reset',payload:{room}})}
+function startRace(broadcast=true){if(!connected||player!==1&&broadcast)return;running=true;ended=false;elapsed=0;last=performance.now();$('finish').classList.add('hidden');$('start').disabled=true;setStatus('CARRERA EN CURSO');if(broadcast&&channel)channel.send({type:'broadcast',event:'start',payload:{room}});cancelAnimationFrame(raf);raf=requestAnimationFrame(frame)}
+$('start').onclick=()=>startRace(true);$('reset').onclick=()=>resetLocal(true);$('again').onclick=()=>resetLocal(true);
+function finish(winner,broadcast=true){if(ended)return;ended=true;running=false;$('winner').textContent=winner===1?'¡Gana el piloto azul!':winner===2?'¡Gana el piloto naranja!':'Carrera finalizada';$('winnerdesc').textContent='Resultado de la sala '+room+'. ¡Preparen la revancha!';$('finish').classList.remove('hidden');setStatus('CARRERA FINALIZADA');$('start').disabled=player!==1;if(broadcast&&channel)channel.send({type:'broadcast',event:'finish',payload:{room,player:winner}})}
+function polygon(p,fill,stroke){ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
+function roadAt(y){let p=clamp((y-90)/(H-90),0,1);return{p,cx:W/2+Math.sin(scroll*.0007+p*2.4)*p*115,half:75+p*450}}
+function bike(x,y,color,dark,lean){ctx.save();ctx.translate(x,y);ctx.rotate(lean*.16);ctx.shadowColor=color;ctx.shadowBlur=13;ctx.fillStyle='#080b10';ctx.beginPath();ctx.ellipse(0,24,12,31,0,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;polygon([[-20,5],[-13,-12],[-8,-25],[8,-25],[14,-8],[20,7],[10,18],[-10,18]],dark,'#d8edf5');polygon([[-13,-10],[-7,-28],[0,-34],[8,-25],[14,-9],[5,-1],[-9,-1]],color);polygon([[-9,-24],[-5,-39],[5,-39],[10,-24]],'#111b27','#7d9aac');ctx.fillStyle='#17212d';ctx.beginPath();ctx.ellipse(0,-46,9,12,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#263d50';ctx.beginPath();ctx.ellipse(0,-48,6,7,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+function draw(){ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,300);sky.addColorStop(0,'#101d38');sky.addColorStop(.55,'#e47c62');sky.addColorStop(1,'#ffc28a');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);let sun=ctx.createRadialGradient(850,170,10,850,170,130);sun.addColorStop(0,'#fff2bd');sun.addColorStop(.35,'#ffbc83');sun.addColorStop(1,'#ffb08000');ctx.fillStyle=sun;ctx.fillRect(650,0,400,340);polygon([[0,290],[100,180],[205,255],[350,145],[510,282],[660,188],[820,280],[1010,150],[1170,245],[1280,185],[1280,430],[0,430]],'#34485a');polygon([[0,340],[160,250],[290,335],[470,230],[620,340],[820,255],[990,345],[1150,260],[1280,330],[1280,460],[0,460]],'#1a3845');for(let i=0;i<36;i++){let x=(i*173+Math.sin(i*2.2)*35)%W,y=280+(i*37)%145,h=28+(i*19)%52;polygon([[x-16,y],[x,y-h],[x+16,y]],i%2?'#102d35':'#16353c')}ctx.fillStyle='#183c35';ctx.fillRect(0,400,W,240);
+for(let i=0;i<54;i++){let y1=90+i*(550/54),y2=90+(i+1)*(550/54),a=roadAt(y1),b=roadAt(y2),z=Math.floor((i+scroll/22)%2);polygon([[a.cx-a.half,y1],[a.cx+a.half,y1],[b.cx+b.half,y2],[b.cx-b.half,y2]],z?'#343c46':'#2b333d');polygon([[a.cx-a.half,y1],[a.cx-a.half+8*a.p+3,y1],[b.cx-b.half+8*b.p+3,y2],[b.cx-b.half,y2]],z?'#e7d7c0':'#d94d48');polygon([[a.cx+a.half-8*a.p-3,y1],[a.cx+a.half,y1],[b.cx+b.half,y2],[b.cx+b.half-8*b.p-3,y2]],z?'#e7d7c0':'#d94d48');if((i+Math.floor(scroll/18))%7<3)for(let lane=-1;lane<=1;lane++){let x1=a.cx+lane*a.half*.48,x2=b.cx+lane*b.half*.48;polygon([[x1-2*a.p,y1],[x1+2*a.p,y1],[x2+4*b.p,y2],[x2-4*b.p,y2]],'#e9edf0')}}
+for(let i=0;i<16;i++){let y=130+((i*65+scroll*.7)%500),r=roadAt(y),s=.2+y/H*.8;for(let side of [-1,1]){let x=r.cx+side*(r.half+18*s);ctx.fillStyle='#a9bdc9';ctx.fillRect(x-3*s,y-22*s,6*s,22*s);ctx.fillStyle='#ffdfb0';ctx.fillRect(x-4*s,y-25*s,8*s,4*s)}}
+obstacles.forEach(o=>{let y=115+o.z*480,r=roadAt(y),x=r.cx+o.lane*r.half*.65,s=.25+o.z*.9;if(o.type==='car'){polygon([[x-24*s,y],[x-18*s,y-23*s],[x+17*s,y-23*s],[x+25*s,y]],'#c9d8e2','#243847');polygon([[x-14*s,y-20*s],[x-8*s,y-32*s],[x+9*s,y-32*s],[x+15*s,y-20*s]],'#385b70')}else polygon([[x-9*s,y],[x,y-29*s],[x+9*s,y]],'#ff9a43','#ffe1a4')});
+riders.forEach((r,i)=>{let road=roadAt(535),x=road.cx+r.x*road.half*.8,color=i===0?'#54e9ff':'#ff9b4a';bike(x,535,color,i===0?'#147b9a':'#a94d19',r.steer);let bx=i===0?28:W-260;ctx.fillStyle='#071521c9';ctx.fillRect(bx,22,230,58);ctx.strokeStyle=color;ctx.strokeRect(bx,22,230,58);ctx.fillStyle=color;ctx.font='900 13px system-ui';ctx.fillText('RIDER 0'+(i+1),bx+14,43);ctx.fillStyle='#fff';ctx.font='900 23px system-ui';ctx.fillText(Math.round(r.speed*220)+' km/h',bx+14,68);ctx.fillStyle='#a8bdcc';ctx.font='10px system-ui';ctx.fillText('LAP '+Math.min(r.laps+1,3)+' / 3',bx+145,67)});
+let v=ctx.createRadialGradient(W/2,H/2,150,W/2,H/2,760);v.addColorStop(0,'#00000000');v.addColorStop(1,'#020712a8');ctx.fillStyle=v;ctx.fillRect(0,0,W,H)}
+function updateStats(){riders.forEach((r,i)=>$('s'+(i+1)).innerHTML='Velocidad: '+Math.round(r.speed*220)+' km/h<br>Vueltas: '+Math.min(r.laps,3)+' / 3');let lead=Math.max(riders[0].laps+riders[0].progress/3,riders[1].laps+riders[1].progress/3);$('bar').style.width=Math.min(100,lead/3*100)+'%';$('progress').textContent='Líder: '+(riders[0].laps+riders[0].progress/3===riders[1].laps+riders[1].progress/3?'Empate':riders[0].laps+riders[0].progress/3>riders[1].laps+riders[1].progress/3?'Jugador 1 azul':'Jugador 2 naranja')+' · '+Math.floor(lead/3*100)+'% del recorrido.'}
+function frame(now){if(!running)return;let dt=Math.min(.035,(now-last)/1000||0);last=now;elapsed+=dt;scroll+=dt*280;riders.forEach((r,i)=>{if(i!==player-1)return;let accel=keys.has(i===0?'w':'arrowup'),left=keys.has(i===0?'a':'arrowleft'),right=keys.has(i===0?'d':'arrowright');r.speed=clamp(r.speed+(accel?dt*.8:-dt*.27),0,1);r.steer=(right?1:0)-(left?1:0);r.x=clamp(r.x+r.steer*dt*(.72+r.speed*.6),-.91,.91);r.progress+=r.speed*dt*.095;if(r.progress>=1){r.laps++;r.progress-=1;if(r.laps>=3)finish(player,true)}if(obstacles.some(o=>o.z>.88&&Math.abs(o.lane-r.x)<.19))r.speed=Math.max(.15,r.speed-.55*dt);if(channel&&now-sendTimer>100){sendTimer=now;channel.send({type:'broadcast',event:'state',payload:{player,state:{x:r.x,speed:r.speed,progress:r.progress,laps:r.laps,steer:r.steer}}})}});spawn-=dt;if(spawn<=0){obstacles.push({z:0,lane:(Math.random()-.5)*1.25,type:Math.random()>.45?'car':'cone'});spawn=.8+Math.random()*1.4}obstacles.forEach(o=>o.z+=dt*(.18+Math.max(riders[0].speed,riders[1].speed)*.3));obstacles=obstacles.filter(o=>o.z<1.1);updateStats();draw();if(running)raf=requestAnimationFrame(frame)}
+window.addEventListener('keydown',e=>{let k=e.key.toLowerCase();if(['arrowup','arrowleft','arrowright',' '].includes(k))e.preventDefault();keys.add(k);if(k==='enter'&&player===1&&!running)startRace(true)});window.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));window.addEventListener('blur',()=>keys.clear());document.querySelectorAll('[data-key]').forEach(b=>{b.onpointerdown=e=>{e.preventDefault();keys.add(b.dataset.key)};b.onpointerup=b.onpointercancel=()=>keys.delete(b.dataset.key)});resetLocal(false);setMsg('Conectando con Supabase Realtime...');
 </script>
 </body></html>
